@@ -6,14 +6,14 @@ pipeline {
         SONAR_HOST_URL = 'http://13.211.153.80:9000'
     }
 
-    stages {
-        stage('Checkout') {
-            steps {
-                // Pull code from GitHub repository
-                git 'https://github.com/shravandevops/kidtree.git'
-            }
-        }
-
+    stage('Checkout') {
+    steps {
+        // Pull code from GitHub repository using System Default Git installation
+        checkout([$class: 'GitSCM',
+                  branches: [[name: '*/main']],
+                  userRemoteConfigs: [[url: 'https://github.com/shravandevops/kidtree.git']]])
+    }
+}
         stage('Build') {
             steps {
                 // Build the project using Maven
