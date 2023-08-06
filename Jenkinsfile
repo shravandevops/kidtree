@@ -30,19 +30,5 @@ pipeline {
             }
         }
     }
-
-    post {
-        always {
-            // Cleanup or additional steps that run after every build
-        }
-
-        success {
-            // Actions to perform on build success
-        }
-
-        failure {
-            // Actions to perform on build failure
-        }
-    }
 }
 
