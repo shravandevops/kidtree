@@ -36,10 +36,15 @@ pipeline {
         DOCKER_CREDENTIALS = credentials('docker-cred')
 
     }
-    steps {
-        script {
-            sh 'cp /var/lib/jenkins/.m2/repository/com/shravan/java-demo/1.0/java-demo-1.0.jar /home/ubuntu/javatwo'
-            // Build Docker image
+    stage('Build and Push Docker Image') {
+            environment {
+                // ... previous environment variables ...
+                WORKSPACE_DIR = "$WORKSPACE/javatwo"
+            }
+            steps {
+                script {
+                    sh 'cp /var/lib/jenkins/.m2/repository/com/shravan/java-demo/1.0/java-demo-1.0.jar $WORKSPACE_DIR'
+                    // Build Docker image
             sh "docker build -t ${DOCKER_IMAGE} ."
 
             // Authenticate with Docker registry
