@@ -9,8 +9,8 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Pull code from GitHub repository
-                git 'https://github.com/shravandevops/kidtree.git'
+                // Pull code from GitHub repository using System Default Git installation
+                git branch: 'main', url: 'https://github.com/shravandevops/kidtree.git'
             }
         }
 
@@ -25,24 +25,29 @@ pipeline {
             steps {
                 // Run SonarQube analysis on the project
                 withSonarQubeEnv('SonarQubeServer') {
-                    sh "mvn sonar:sonar -Dsonar.host.url=${env.SONAR_HOST_URL}"
+                    sh "mvn sonar:sonar -Dsonar.host.url=${SONAR_HOST_URL}"
                 }
             }
         }
+                stage('Build and Push Docker Image') {
+    environment {
+        DOCKER_REGISTRY_URL = "docker.io"
+        DOCKER_IMAGE = "shravandevops/java-demo:${BUILD_NUMBER}"
+        DOCKER_CREDENTIALS = credentials('docker-cred')
+
     }
+    steps {
+        script {
+            // Build Docker image
+            sh "docker build -t ${DOCKER_IMAGE} ."
 
-    post {
-        always {
-            // Cleanup or additional steps that run after every build
-        }
-
-        success {
-            // Actions to perform on build success
-        }
-
-        failure {
-            // Actions to perform on build failure
+            // Authenticate with Docker registry
+            withDockerRegistry(credentialsId: 'docker-cred', url: "${DOCKER_REGISTRY_URL}") {
+                // Push Docker image to the registry
+                sh "docker push ${DOCKER_IMAGE}"
+            }
         }
     }
 }
-
+    }
+}
