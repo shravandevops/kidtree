@@ -36,9 +36,6 @@ pipeline {
         stage('Build and Push Docker Image') {
             steps {
                 script {
-                    // Copy the JAR file to the 'javatwo' directory
-                    sh 'cp target/java-demo-1.0.jar /home/ubuntu/javatwo'
-
                     // Build Docker image
                     sh "docker build -t ${DOCKER_IMAGE} ."
 
