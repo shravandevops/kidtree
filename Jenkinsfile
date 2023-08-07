@@ -29,5 +29,25 @@ pipeline {
                 }
             }
         }
+                stage('Build and Push Docker Image') {
+    environment {
+        DOCKER_REGISTRY_URL = "docker.io"
+        DOCKER_IMAGE = "shravandevops/java-demo:${BUILD_NUMBER}"
+        DOCKER_CREDENTIALS = credentials('docker-cred')
+
+    }
+    steps {
+        script {
+            // Build Docker image
+            sh "docker build -t ${DOCKER_IMAGE} ."
+
+            // Authenticate with Docker registry
+            withDockerRegistry(credentialsId: 'docker-cred', url: "${DOCKER_REGISTRY_URL}") {
+                // Push Docker image to the registry
+                sh "docker push ${DOCKER_IMAGE}"
+            }
+        }
+    }
+}
     }
 }
