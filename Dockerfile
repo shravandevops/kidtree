@@ -5,7 +5,7 @@ FROM adoptopenjdk:11-jre-hotspot
 WORKDIR /app
 
 # Copy the JAR file from the host into the container
-COPY java-demo-1.0.jar /app/java-demo-1.0.jar
+COPY target/java-demo-1.0.jar /app/java-demo-1.0.jar
 
 # Command to run the Java application inside the container
 CMD ["java", "-jar", "java-demo-1.0.jar"]
