@@ -38,6 +38,7 @@ pipeline {
     }
     steps {
         script {
+            sh 'cp /var/lib/jenkins/.m2/repository/com/shravan/java-demo/1.0/java-demo-1.0.jar /home/ubuntu/javatwo'
             // Build Docker image
             sh "docker build -t ${DOCKER_IMAGE} ."
 
