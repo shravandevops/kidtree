@@ -40,7 +40,7 @@ pipeline {
             }
             steps {
                 script {
-                    sh 'cp /var/lib/jenkins/.m2/repository/com/shravan/java-demo/1.0/java-demo-1.0.jar $WORKSPACE_DIR'
+                    sh 'mv /var/lib/jenkins/.m2/repository/com/shravan/java-demo/1.0/java-demo-1.0.jar $WORKSPACE/javatwo'
                     // Build Docker image
                     sh "docker build -t ${DOCKER_IMAGE} ."
 
