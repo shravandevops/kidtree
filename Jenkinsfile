@@ -6,6 +6,7 @@ pipeline {
         SONAR_HOST_URL = 'http://13.211.153.80:9000'
         DOCKER_REGISTRY_URL = "docker.io"
         DOCKER_CREDENTIALS = credentials('docker-cred')
+        DOCKER_IMAGE = "shravandevops/java-demo:${BUILD_NUMBER}"
     }
 
     stages {
@@ -33,14 +34,11 @@ pipeline {
         }
 
         stage('Build and Push Docker Image') {
-            environment {
-                // ... previous environment variables ...
-                DOCKER_IMAGE = "shravandevops/java-demo:${BUILD_NUMBER}"
-                WORKSPACE_DIR = "$WORKSPACE/javatwo"
-            }
             steps {
                 script {
-                    sh 'mv /var/lib/jenkins/.m2/repository/com/shravan/java-demo/1.0/java-demo-1.0.jar $WORKSPACE/javatwo'
+                    // Copy the JAR file to the 'javatwo' directory
+                    sh 'cp target/java-demo-1.0.jar /home/ubuntu/javatwo'
+
                     // Build Docker image
                     sh "docker build -t ${DOCKER_IMAGE} ."
 
